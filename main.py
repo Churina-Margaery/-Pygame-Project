@@ -8,7 +8,6 @@ pygame.init()
 FPS = 50
 WIDTH = 650
 HEIGHT = 650
-maze(1, 1)
 
 
 def load_level(filename):
@@ -39,7 +38,16 @@ def terminate():
 
 
 def start_screen():
-    intro_text = ["Лабиринт"]
+    intro_text = ["Путешествия Шарика",
+                  "",
+                  "Что бы пройти игру, нужно собрать все мячики,",
+                  "не наступать на препятствия,",
+                  "пройти все уровни.",
+                  "",
+                  "Уровень считается пройденным, если вы дошли до",
+                  "выделенной клетки и собрали все мячики.",
+                  "",
+                  "Что бы начать, кликните по экрану"]
 
     fon = pygame.transform.scale(load_image('fon.jpg'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
@@ -64,8 +72,8 @@ def start_screen():
         clock.tick(FPS)
 
 
-tile_images = {'wall': load_image('box.png'), 'empty': load_image('grass.png')}
-player_image = load_image('mar.png')
+tile_images = {'wall': load_image('box.png'), 'empty': load_image('carpet.png')}
+player_image = load_image('dog.png')
 
 tile_width = tile_height = 50
 
@@ -102,9 +110,10 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
         super().__init__(player_group, all_sprites)
         self.image = player_image
-        self.rect = self.image.get_rect().move(tile_width * pos_x + 15, tile_height * pos_y + 5)
+        self.rect = self.image.get_rect().move(tile_width * pos_x, tile_height * pos_y)
 
 
+maze(4, 4)
 size = WIDTH, HEIGHT
 screen = pygame.display.set_mode(size)
 clock = pygame.time.Clock()
@@ -125,7 +134,7 @@ while True:
                     player.rect.x -= 50
                     player_group.draw(screen)
             if event.key == pygame.K_RIGHT:
-                if player.rect.x <= 650:
+                if player.rect.x < 600:
                     tiles_group.draw(screen)
                     player.rect.x += 50
                     player_group.draw(screen)
@@ -135,7 +144,7 @@ while True:
                     player.rect.y -= 50
                     player_group.draw(screen)
             if event.key == pygame.K_DOWN:
-                if player.rect.y <= 650:
+                if player.rect.y < 600:
                     tiles_group.draw(screen)
                     player.rect.y += 50
                     player_group.draw(screen)

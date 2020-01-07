@@ -4,8 +4,8 @@ import os
 import sys
 
 GRAVITY = -0.008
-width = 500
-height = 500
+width = 650
+height = 650
 screen_rect = (0, 0, width, height)
 all_sprites = pygame.sprite.Group()
 
@@ -69,22 +69,25 @@ class Particle(pygame.sprite.Sprite):
             self.kill()
 
 
-size = width, height
-screen = pygame.display.set_mode(size)
-clock = pygame.time.Clock()
-running = True
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            # создаём частицы по щелчку мыши
-            create_particles(pygame.mouse.get_pos())
+def end_screen():
+    size = width, height
+    screen = pygame.display.set_mode(size)
+    clock = pygame.time.Clock()
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                # создаём частицы по щелчку мыши
+                create_particles(pygame.mouse.get_pos())
 
-    all_sprites.update()
-    screen.fill((0, 0, 0))
-    all_sprites.draw(screen)
-    pygame.display.flip()
-    clock.tick(50)
+        all_sprites.update()
+        screen.fill((0, 0, 0))
+        all_sprites.draw(screen)
+        pygame.display.flip()
+        clock.tick(50)
 
+
+end_screen()
 pygame.quit()

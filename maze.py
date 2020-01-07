@@ -28,14 +28,15 @@ def draw_console(m, mh):
     for i in range(mh):
         if i == 0:
             t = ['##' if x else '.' for x in m[i][1:]]
-            print("@"+''.join(x for x in t).rjust(9, "#"), file=f)
+            print("@"+''.join(x for x in t).ljust(15, "#"), file=f)
         elif i % 2 == 0:
             t = ['##' if x else '.' for x in m[i]]
-            print(''.join(x for x in t), file=f)
+            print(''.join(x for x in t).ljust(15, "#"), file=f)
         else:
             t = ['##.' if x else '.' for x in m[i][::2]]
-            print(''.join(x for x in t), file=f)
-        # print('.' * len(m[i]), file=f)
+            print(''.join(x for x in t).ljust(15, "#"), file=f)
+    for i in range(15 - mh):
+        print("###############", file=f)
     f.close()
 
 
