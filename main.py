@@ -14,7 +14,7 @@ screen_rect = (0, 0, width, height)
 all_sprites = pygame.sprite.Group()
 
 
-def load_image(name, colorkey=None):
+def load_image(name, colorkey=None):  # функция загрузки изображений
     fullname = os.path.join('data', name)
     image = pygame.image.load(fullname)
     if colorkey is not None:
@@ -28,7 +28,7 @@ def load_image(name, colorkey=None):
     return image
 
 
-def terminate():
+def terminate():  # функция выхода
     pygame.quit()
     sys.exit()
 
@@ -36,6 +36,8 @@ def terminate():
 particles_group = pygame.sprite.Group()
 
 
+# Создание последнего окна - оно показывается в случае победы.
+# если игрок сам вышел - похожее окно, но без времени, импортируется из другого файла
 def create_particles(position):
     particle_count = 20
     numbers = range(-5, 6)
@@ -66,7 +68,8 @@ class Particle(pygame.sprite.Sprite):
             self.kill()
 
 
-def end_screen(length):
+def end_screen(length):  # последнее окно
+    sound = pygame.mixer.Sound('data/balls_sound.wav')
     size = width, height
     screen = pygame.display.set_mode(size)
     pygame.display.set_caption('Maze')
@@ -82,6 +85,7 @@ def end_screen(length):
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 create_particles(pygame.mouse.get_pos())
+                sound.play()
         screen.blit(fon, (0, 0))
         clock.tick(50)
         show_time(duration)
@@ -90,7 +94,7 @@ def end_screen(length):
         pygame.display.flip()
 
 
-def show_time(difference):
+def show_time(difference):  # отображение времени на последнем окне
     seconds = difference % 60
     mins = str((difference - seconds) // 60)
     seconds = str(seconds)
@@ -112,7 +116,7 @@ HEIGHT = 650
 balls = 0
 
 
-def load_level(filename):
+def load_level(filename):  # загрузка уровня
     filename = "data/" + filename
     with open(filename, 'r') as mapFile:
         level_map = [line.strip() for line in mapFile]
@@ -120,7 +124,7 @@ def load_level(filename):
     return list(map(lambda x: x.ljust(max_width, '.'), level_map))
 
 
-def rules():
+def rules():  # окно с правилами
     pygame.display.set_caption('Rules')
     fon = pygame.transform.scale(load_image('start.jpg'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
@@ -168,7 +172,7 @@ def rules():
         clock.tick(FPS)
 
 
-def info():
+def info():  # окно с информацией
     pygame.display.set_caption('Info')
     fon = pygame.transform.scale(load_image('start.jpg'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
@@ -217,7 +221,7 @@ def info():
         clock.tick(FPS)
 
 
-def draw_buttons():
+def draw_buttons():  # рисование кнопок на главном экране
     font = pygame.font.Font("data/font.ttf", 35)
     text = font.render("Правила", 1, (102, 0, 102))
     text_x = 210
@@ -245,7 +249,7 @@ def draw_buttons():
                                               text_w + 20, text_h + 20), 5)
 
 
-def draw_text():
+def draw_text():   # отображение текста на главном экране
     intro_text = ["\nПутешествия Хомяка\n"]
     pygame.display.set_caption('Maze')
     fon = pygame.transform.scale(load_image('start.jpg'), (WIDTH, HEIGHT))
@@ -261,7 +265,7 @@ def draw_text():
     screen.blit(string_rendered, intro_rect)
 
 
-def draw_count(have, all_balls):
+def draw_count(have, all_balls):   # отображение количества собранных мячей
     intro_text = ["\nСобрано: \n",
                   have + "/" + all_balls]
     text_coord = 10
@@ -283,7 +287,7 @@ def draw_count(have, all_balls):
         screen.blit(string_rendered, intro_rect)
 
 
-def start_screen():
+def start_screen():  # первое окно
     flag_1 = False
     flag_2 = False
     flag_3 = False
@@ -358,7 +362,7 @@ wall_group = pygame.sprite.Group()
 balls = []
 
 
-def generate_level(level):
+def generate_level(level):  # создание уровня с помощью спрайтов
     ball_amount = 0
     ball_dict = {}
     screen.fill((0, 0, 0))
@@ -380,6 +384,8 @@ def generate_level(level):
                 ball_dict[(x, y)] = True
             pygame.display.flip()
     return new_player, x, y, ball_amount, ball_dict
+
+# классы разных спрайтов
 
 
 class Tile(pygame.sprite.Sprite):
@@ -425,6 +431,8 @@ class Player(pygame.sprite.Sprite):
         return False
 
 
+# основной цикл
+sound = pygame.mixer.Sound('data/step_1.wav')
 pygame.display.set_caption('Maze')
 taken = 0
 END = 10
@@ -461,6 +469,7 @@ while running:
                     if player.check():
                         player.rect.x += 50
                     player_group.draw(screen)
+                    sound.play()
             if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                 if player.rect.x < 600:
                     tiles_group.draw(screen)
@@ -468,6 +477,7 @@ while running:
                     if player.check():
                         player.rect.x -= 50
                     player_group.draw(screen)
+                    sound.play()
             if event.key == pygame.K_UP or event.key == pygame.K_w:
                 if 50 <= player.rect.y:
                     tiles_group.draw(screen)
@@ -475,6 +485,7 @@ while running:
                     if player.check():
                         player.rect.y += 50
                     player_group.draw(screen)
+                    sound.play()
             if event.key == pygame.K_DOWN or event.key == pygame.K_s:
                 if player.rect.y < 600:
                     tiles_group.draw(screen)
@@ -482,6 +493,7 @@ while running:
                     if player.check():
                         player.rect.y -= 50
                     player_group.draw(screen)
+                    sound.play()
             balls_group.draw(screen)
             player_group.draw(screen)
     for elem in balls:
@@ -494,7 +506,6 @@ while running:
             time = datetime.strftime(datetime.now(), "%Y.%m.%d %H:%M:%S").split()[1]
             new_time = int(time.split(":")[0]) * 3600 + int(time.split(":")[1]) * 60 + int(time.split(":")[2])
             duration = new_time - sec
-            print(duration)
             fon = pygame.transform.scale(load_image('fon.jpg'), (WIDTH, HEIGHT))
             screen.blit(fon, (0, 0))
             running = False
@@ -536,4 +547,4 @@ while running:
             pygame.display.flip()
     pygame.display.flip()
 
-end_screen(duration)
+end_screen(duration)  # последнее окно со временем игры
