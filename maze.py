@@ -22,25 +22,41 @@ def remove_wall(cf, cs, m):
     m[cs[0]+x][cs[1]+y] = 0
 
 
-def draw_console(m, mh):
+def draw_console(m, mh, flags):
     f = open("data/map.txt", encoding="utf8", mode="w")
     f.truncate()
+    lst = []
     for i in range(mh):
         if i == 0:
             t = ['##' if x else '.' for x in m[i][1:]]
-            print("@"+''.join(x for x in t).ljust(15, "#"), file=f)
+            string = "@"+''.join(x for x in t).ljust(15, "#")
+            lst.append(list(string))
         elif i % 2 == 0:
             t = ['##' if x else '.' for x in m[i]]
-            print(''.join(x for x in t).ljust(15, "#"), file=f)
+            string = ''.join(x for x in t).ljust(14, "#")
+            lst.append(list(string))
         else:
             t = ['##.' if x else '.' for x in m[i][::2]]
-            print(''.join(x for x in t).ljust(15, "#"), file=f)
+            string = ''.join(x for x in t).ljust(14, "#")
+            lst.append(list(string))
     for i in range(15 - mh):
-        print("###############", file=f)
+        string = "##############"
+        lst.append(list(string))
+    for _ in range(flags):
+        chosen = None
+        i = None
+        j = None
+        while chosen != "#":
+            i = random.choice(range(0, mh - 1))
+            j = random.choice(range(0, len(m[i])))
+            chosen = lst[i][j]
+        lst[i][j] = "!"
+    for line in lst:
+        print("".join(line), file=f)
     f.close()
 
 
-def maze(w0, h0):
+def maze(w0, h0, flags):
     w = 2 * w0 + 1
     h = 2 * h0 + 1
     maze = []
@@ -79,4 +95,5 @@ def maze(w0, h0):
             currentcell = stackcurr[-1]
             endcell = random.randrange(1, h, 2)
             maze[endcell][-1] = 0
-    draw_console(maze, h)
+    draw_console(maze, h, flags)
+
