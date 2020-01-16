@@ -37,7 +37,8 @@ particles_group = pygame.sprite.Group()
 
 
 # Создание последнего окна - оно показывается в случае победы.
-# если игрок сам вышел - похожее окно, но без времени, импортируется из другого файла
+# если игрок сам вышел - похожее окно, но без времени,
+# импортируется из другого файла
 def create_particles(position):
     particle_count = 20
     numbers = range(-5, 6)
@@ -163,7 +164,8 @@ def rules():  # окно с правилами
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
-            elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+            elif event.type == pygame.KEYDOWN or \
+                    event.type == pygame.MOUSEBUTTONDOWN:
                 x, y = pygame.mouse.get_pos()
                 if 20 <= x <= 158 and 570 <= y <= 606:
                     screen.blit(fon, (0, 0))
@@ -212,7 +214,8 @@ def info():  # окно с информацией
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
-            elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+            elif event.type == pygame.KEYDOWN or \
+                    event.type == pygame.MOUSEBUTTONDOWN:
                 x, y = pygame.mouse.get_pos()
                 if 20 <= x <= 158 and 570 <= y <= 606:
                     screen.blit(fon, (0, 0))
@@ -249,7 +252,7 @@ def draw_buttons():  # рисование кнопок на главном эк�
                                               text_w + 20, text_h + 20), 5)
 
 
-def draw_text():   # отображение текста на главном экране
+def draw_text():  # отображение текста на главном экране
     intro_text = ["\nПутешествия Хомяка\n"]
     pygame.display.set_caption('Maze')
     fon = pygame.transform.scale(load_image('start.jpg'), (WIDTH, HEIGHT))
@@ -265,7 +268,7 @@ def draw_text():   # отображение текста на главном э�
     screen.blit(string_rendered, intro_rect)
 
 
-def draw_count(have, all_balls):   # отображение количества собранных мячей
+def draw_count(have, all_balls):  # отображение количества собранных мячей
     intro_text = ["\nСобрано: \n",
                   have + "/" + all_balls]
     text_coord = 10
@@ -309,7 +312,8 @@ def start_screen():  # первое окно
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
-            elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+            elif event.type == pygame.KEYDOWN or \
+                    event.type == pygame.MOUSEBUTTONDOWN:
                 x, y = pygame.mouse.get_pos()
                 if 210 <= x <= 419 and 290 <= y <= 356:
                     rules()
@@ -321,22 +325,22 @@ def start_screen():  # первое окно
                 x, y = pygame.mouse.get_pos()
                 if 210 <= x <= 419 and 290 <= y <= 356:
                     flag_1 = True
-                    pygame.draw.rect(screen, (56, 0, 102), (210 - 10, 300 - 10,
-                                                            189 + 20, 36 + 20), 5)
+                    pygame.draw.rect(screen, (56, 0, 102),
+                                     (200, 290, 189 + 20, 36 + 20), 5)
                     pygame.display.flip()
                     flag_2 = False
                     flag_3 = False
                 elif 225 <= x <= 404 and 360 <= y <= 426:
                     flag_2 = True
-                    pygame.draw.rect(screen, (163, 88, 232), (225 - 10, 370 - 10,
-                                                              160 + 20, 36 + 20), 5)
+                    pygame.draw.rect(screen, (163, 88, 232), (215, 370 - 10,
+                                                              180, 56), 5)
                     pygame.display.flip()
                     flag_1 = False
                     flag_3 = False
                 elif 218 <= x <= 386 and 420 <= y <= 486:
                     flag_3 = True
-                    pygame.draw.rect(screen, (163, 88, 232), (228 - 10, 440 - 10,
-                                                              149 + 20, 36 + 20), 5)
+                    pygame.draw.rect(screen, (163, 88, 232), (218, 430,
+                                                              169, 56), 5)
                     pygame.display.flip()
                     flag_1 = False
                     flag_2 = False
@@ -385,6 +389,7 @@ def generate_level(level):  # создание уровня с помощью с
             pygame.display.flip()
     return new_player, x, y, ball_amount, ball_dict
 
+
 # классы разных спрайтов
 
 
@@ -392,21 +397,24 @@ class Tile(pygame.sprite.Sprite):
     def __init__(self, tile_type, pos_x, pos_y):
         super().__init__(tiles_group, all_sprites)
         self.image = tile_images[tile_type]
-        self.rect = self.image.get_rect().move(tile_width * pos_x, tile_height * pos_y)
+        self.rect = self.image.get_rect().move(tile_width * pos_x,
+                                               tile_height * pos_y)
 
 
 class Wall(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
         super().__init__(wall_group, all_sprites)
         self.image = tile_images["wall"]
-        self.rect = self.image.get_rect().move(tile_width * pos_x, tile_height * pos_y)
+        self.rect = self.image.get_rect().move(tile_width * pos_x,
+                                               tile_height * pos_y)
 
 
 class Ball(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
         super().__init__(tiles_group, all_sprites, balls_group)
         self.image = tile_images["ball"]
-        self.rect = self.image.get_rect().move(tile_width * pos_x + 10, tile_height * pos_y + 10)
+        self.rect = self.image.get_rect().move(tile_width * pos_x + 10,
+                                               tile_height * pos_y + 10)
 
     def check(self):
         if pygame.sprite.spritecollideany(self, player_group):
@@ -423,7 +431,8 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
         super().__init__(player_group, all_sprites)
         self.image = player_image
-        self.rect = self.image.get_rect().move(tile_width * pos_x, tile_height * pos_y)
+        self.rect = self.image.get_rect().move(tile_width * pos_x,
+                                               tile_height * pos_y)
 
     def check(self):
         if pygame.sprite.spritecollideany(self, wall_group):
@@ -452,7 +461,8 @@ pygame.display.flip()
 level = 1
 flag = False
 time = datetime.strftime(datetime.now(), "%Y.%m.%d %H:%M:%S").split()[1]
-sec = int(time.split(":")[0]) * 3600 + int(time.split(":")[1]) * 60 + int(time.split(":")[2])
+sec = int(time.split(":")[0]) * 3600 + int(time.split(":")[1]) * 60 \
+      + int(time.split(":")[2])
 running = True
 duration = 0
 while running:
@@ -460,6 +470,7 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             from stars import end_screen
+
             terminate()
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT or event.key == pygame.K_a:
@@ -503,10 +514,14 @@ while running:
     if not balls:
         level += 1
         if level >= END:
-            time = datetime.strftime(datetime.now(), "%Y.%m.%d %H:%M:%S").split()[1]
-            new_time = int(time.split(":")[0]) * 3600 + int(time.split(":")[1]) * 60 + int(time.split(":")[2])
+            time = datetime.strftime(datetime.now(),
+                                     "%Y.%m.%d %H:%M:%S").split()[1]
+            hours = int(time.split(":")[0]) * 3600
+            minutes = int(time.split(":")[1]) * 60
+            new_time = hours + minutes + int(time.split(":")[2])
             duration = new_time - sec
-            fon = pygame.transform.scale(load_image('fon.jpg'), (WIDTH, HEIGHT))
+            fon = pygame.transform.scale(load_image('fon.jpg'),
+                                         (WIDTH, HEIGHT))
             screen.blit(fon, (0, 0))
             running = False
         else:
